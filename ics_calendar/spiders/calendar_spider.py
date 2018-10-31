@@ -28,8 +28,10 @@ class CalendarSpider(scrapy.Spider):
         gcal = Calendar.from_ical(response.body)
         for component in gcal.walk():
             if component.name == "VEVENT":
-                a = Alarm({'ACTION':'DISPLAY', 'TRIGGER':'-PT15M'})
+                a = Alarm({'ACTION':'DISPLAY', 'TRIGGER;VALUE=DURATION':'-PT15M'})
                 component.add_component(a)
+                b = Alarm({'ACTION':'DISPLAY', 'TRIGGER;VALUE=DURATION':'PT0S'})
+                component.add_component(b)
 
         self.log('Save to file')
         f = open('calendar.ics', 'wb')
